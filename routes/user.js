@@ -23,7 +23,7 @@ router.post('/', async function(req, res, next) {
     res.status(201).header('Location' , '/').send()
   }
   catch (error) {
-    res.status(400).json(error.errors)
+    res.status(400).json({"errors": error.errors.map(x => x.message)})
   }
 })
 

@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', async function(req, res, next) {
   try {
-    let courses = await Course.findAll()
+    let courses = await Course.findAll({ include: User })
     res.status(200).json(courses)
   }
   catch (error) {
@@ -36,11 +36,11 @@ router.get('/:id', async function(req, res, next) {
 
 router.post('/', checkAuth, async function(req, res, next) {
   try {
-    await Course.create(req.body)
-    res.status(201).header('Location' , '/').send()
+    let course = await Course.create(req.body)
+    res.status(201).header('Location' , `/api/courses/${course.id}`).send()
   }
   catch (error) {
-    res.status(400).json(error.errors)
+    res.status(400).json({"errors": error.errors.map(x => x.message)})
   }
 })
 
@@ -53,7 +53,7 @@ router.put('/:id', checkAuth, async function(req, res, next) {
         await course.update(req.body)
         res.status(204).send()
       } catch (error) {
-        res.status(400).json(error.errors)
+        res.status(400).json({"errors": error.errors.map(x => x.message)})
       }
     }
     else {

@@ -15,6 +15,7 @@ sequelize.authenticate()
   .then(() => {
     console.log("All models were synchronized successfully")
   })
+  //message to the console in the event the database connection is unsuccessful 
   .catch(error => { console.log(error) })
 
 // variable to enable global error logging
